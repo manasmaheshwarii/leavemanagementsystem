@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-storage.js"></script>
+    
+    <script src="https://kit.fontawesome.com/d733855d1a.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        var queryString = decodeURIComponent(window.location.search);
+        queryString = queryString.substring(1);
+        var queries = queryString.split("&");
+        LoggedId = queries[0].split("=")[1];
+
+
+        const now = new Date();
+        var item = localStorage.getItem(LoggedId);
+        
+        if(item === null || item === undefined){
+            window.location.href = "https://leave-management-sys.netlify.app/";
+        };
+        console.log(now.getTime, item);
+        if(now.getTime() === item || now.getTime() > item){
+            localStorage.removeItem(LoggedId);
+            window.location.href = "https://leave-management-sys.netlify.app/";
+        };
+  </script>
+
+</head>
+<body onload="user()">
+    <header class="header">
+        <ul>
+            <li class="logo">
+                <img src="banasthali_logo.png" alt="logo" class="lms-logo">
+            </li>
+            <li class="title">Banasthali Leave Management System</li>
+            <li class="user" id = "LoggedUser"><i class="fas fa-user"></i></li>
+            <li class="user dropdown" id = "dropit"><i class="fas fa-sort-down" id = "dropicon"></i></li>
+        </ul>
+    </header>
+
+    <div class="profile hide" id = "dropoptions">
+        <ul>
+            <div class="tab prof" id = "profile-tab" onclick="profile()"><li><i class="fas fa-user icon"></i> Profile</li></div>
+            <div class="tab id" id = "id-tab"><li id = "id_li"></li></div>
+            <div class="tab leaves-data" id = "all-leaves-tab" onclick = "showAllLeaves()"><li id = "all-leaves"><i class="fas fa-database icon"></i> Database</li></div>
+            <div class="tab logout" onclick="logout()"><li><i class="fas fa-sign-out-alt icon"></i> LOG OUT</li></div>
+        </ul>
+    </div>
+    <div class="student" id = "student">
+        <div class="heading">Student Leave Apply</div>
+        <button class="btn button history-btn" onclick="getLeaves()" id = "history-btn"><i class="fas fa-history"></i>  Leave History</button>
+        <button class="btn button back-btn" onclick="back()" id = "back-btn"><i class="fas fa-arrow-left"></i> Back</button>
+        <div class="form-leave form" id = "form-leave" >
+            <div class="element element-leave">
+                <label for="type">Leave Applied for </label>
+                <select name="leaveType" id="leaveType">
+                    <option value="select">Select</option>
+                    <option value="General">General Leave</option>
+                    <option value="Medical">Medical Leave</option>
+                    <option value="Duty">Duty Leave</option>
+                </select>
+            </div>
+            
+            <div class="element element-leave">
+                <label for="start-date"> Applying from date</label>
+                <input type="date" name="start-date" id="start-date">
+            </div>
+            
+            <div class="element element-leave">
+                <label for="end-date">Applying to date</label>
+                <input type="date" name="end-date" id="end-date">
+            </div>
+            
+            <div class="element element-leave">
+                <label for="reason">Reason</label>
+                <textarea name="reason" id="leave-reason" cols="40" rows="5" placeholder="Enter the reason for leave in detail......"></textarea>
+            </div>
+    
+            <button class="btn leave-btn" onclick = "applyLeave()">Submit</button>
+    
+        </div>
+        <div class="leave-history" id = "leave-history" >
+            
+        </div>
+
+        <div class="profile-container grid-container" id = "profile-container">
+            
+            <h4 class="grid-item head head1">Student Profile</h4>
+            <h2 class="grid-item head head2" id = "uid-head"></h2>
+            <h3 class="grid-item head align-left head3"><u>Student Personal Information</u></h3>
+            <p class="name grid-item info head-info">Full Name</p>
+            <p class="name-info grid-item info" id="input-name"></p>
+            <p class="uid grid-item info head-info">ID</p>
+            <p class="uid-info grid-item info" id="input-uid"></p>
+            <p class="dob grid-item info head-info">Date of Birth</p>
+            <p class="dob-info grid-item info" id="input-dob"></p>
+            <p class="email grid-item info head-info">Email</p>
+            <p class="email-info grid-item info" id="input-email"></p>
+            <p class="contact grid-item info head-info">Contact No.</p>
+            <p class="contact-info grid-item info" id="input-contact"></p>
+
+            <h3 class="grid-item head align-left head3"><u>Leave Information</u></h3>
+            <p class="uid grid-item info head-info">TOTAL LEAVES APPLIED</p>
+            <p class="uid-info grid-item info center" id="total-leaves">0</p>
+            <p class="dob grid-item info head-info">TOTAL LEAVES APPROVED</p>
+            <p class="dob-info grid-item info center" id="leaves-approved">0</p>
+            <p class="dob grid-item info head-info">TOTAL LEAVES REJECTED</p>
+            <p class="dob-info grid-item info center" id="leaves-rejected">0</p>
+            <p class="dob grid-item info head-info">TOTAL LEAVES PENDING</p>
+            <p class="dob-info grid-item info center" id="leaves-pending">0</p>
+        </div>
+    </div>
+    
+
+    <div class="admin-leaves" id = "admin-leaves">
+        <div class="heading" id = "leave-approval">Pending leaves for Approval</div>
+        <div id = "leave-container">
+            <h2 class="leave-head" id = "container-head">Leaves</h2>
+        </div>
+    </div>
+
+    <div class="all-leaves-container" id = "all-leaves-container">
+        <button class="btn button back-btn" onclick="backtomain()" id = "backtomain-btn"><i class="fas fa-arrow-left"></i> Main Page</button>
+        <table class="table">
+            <tr class="table-headings" id = "table-headings">
+                <th class="head">UID</th>
+                <th class="head">Leave Type</th>
+                <th class="head">Start Date</th>
+                <th class="head">End Date</th>
+                <th class="head">Reason</th>
+                <th class="head">Status</th>
+            </tr>
+            
+        </table>
+    </div>
+
+    <footer class="footer">
+        <p>Teammates - Aditi Sharma, Shanica Pandey, Nupur, Radhika Paliwal, Priyanshi Seth</p>
+        
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css" integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.2.2/firebase-storage.js"></script>
+</head>
+<body class="registration-body">
+    <div class="container-register">
+        <div class="left">
+            <img src="bansthaliuniv.jpg" alt="">
+        </div>
+        <div class="right">
+            <form action="" class="registration-form"  onsubmit="submitStudentData(event)">
+                <h2 class="head">STUDENT REGISTRATION FORM</h2> 
+                
+                <div class="element ele">
+                    <label for="name"><i class="fas fa-user icon"></i> Full Name<span style = "color :#6386a6;">*</span></label>
+                    <input type="text" name = "name" placeholder="Your Name" required id = "name">
+                </div>
+        
+                <div class="element ele">
+                    <label for="uid"><i class="fas fa-id-badge icon"></i>ID<span style = "color : #6386a6;">*</span></label>
+                    <input type="text" name = "uid" placeholder="Your ID" required id = "uid">
+                </div>
+
+                <div class="element ele">
+                    <label for="dob"><i class="far fa-calendar-alt icon"></i> DOB<span style = "color : #6386a6;">*</span></label>
+                    <input type="date" name = "dob" placeholder="Your Date of Birth" required id = "dob">
+                </div>
+        
+                <div class="element ele">
+                    <label for="email"><i class="fas fa-envelope icon"></i> Email ID<span style = "color : #6386a6">*</span></label>
+                    <input type="email" name = "email" placeholder="Your email id" required id = "email">
+                </div>
+        
+                <div class="element ele">
+                    <label for="mobile"><i class="fas fa-phone-square-alt icon"></i> Mobile No.<span style = "color :#6386a6;">*</span></label>
+                    <input type="tel" name="mobile" placeholder="Your mobile no." required id = "mobile" pattern="[0-9]{10}" title = "mobile no. should be of 10 digits">
+                </div>
+        
+                <div class="element ele">
+                    <label for="pwd"><i class="fas fa-lock icon"></i> Password<span style = "color :#6386a6;">*</span></label>
+                    <input type="password" name="pwd" id="pwd" placeholder="Your Password" required id = "pwd">
+                </div>
+        
+                <div class="element ele">
+                    <label for="confirm-pwd"><i class="fas fa-lock icon"></i> Confirm Password<span style = "color :#6386a6;">*</span></label>
+                    <input type="password" name="confirm-pwd" id="confirm-pwd" placeholder="Confirm password" required>
+                </div>
+
+                <div class="element ele">
+                    <label for="img"><i class="fas fa-image icon"></i> Parent's Signature<span style = "color : #6386a6;">*</span></label>
+                    <input type="file" id="uploadimg" name="img" accept=".jpg,.jpeg" style="padding-left : 0;" required>
+                </div>
+        
+                <button class="btn btn-register" type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
