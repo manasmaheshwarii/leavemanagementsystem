@@ -836,7 +836,7 @@ function logout(){
         localStorage.setItem(globalData[1], new Date().getSeconds());
     }
     
-    window.location.href = "https://leave-management-sys.netlify.app/";
+    window.location.href = "index.html";
 }
 
 
